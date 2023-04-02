@@ -1,9 +1,8 @@
 //import { assertType, expectTypeOf, vi } from 'vitest'
-import {beforeEach, describe, expect, test, vi} from 'vitest';
-//import {fireEvent, render, screen, waitFor} from '@testing-library/react';
-//import { useState } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import Home from '@/pages/index';
-//import handleTruc from '@/pages/index';
 import lightEqualNum from '@/pages/index';
 import deepEqual from '@/pages/index';
 import "@testing-library/jest-dom";
@@ -12,6 +11,11 @@ import "@testing-library/jest-dom";
 it('testing with toMatchSnapshot', () => {
   const result = 'Gertrude'
   expect(result).toMatchSnapshot()
+});
+
+test('shows text from Home', () => {
+  render(<Home />);
+  screen.getByText(/gertrude/i);
 });
 
 //testing function component
@@ -36,12 +40,11 @@ test('testing if function deepEqual work properly', () => {
   expect(result).not.deep.equal("Gertrude");
 });
 
-
 /*
-//testing functions
-test('my func handleTruc work properly', () => {
-  expect(handleTruc).toBeDefined()
-});
+afterEach(() => {
+  // restoring date after each test run
+  vi.clearAllMocks();
+}); // end of afterEach
 
 ---
 
@@ -59,4 +62,24 @@ test('my types work properly', () => {
   // @ts-expect-error name is a string
   assertType(lightEqualNum({ name: "Gertrude" }))
 });
+
+//Not API case but seems no good to test useState & property !
+// mock only in API case
+describe("testing button with useState", () => {
+  
+  let button: HTMLElement;
+
+  test("useState, setState are called", () => {
+    const setStateMock = vi.fn();
+    const useStateMock: any = (useState: any) => [useState, setStateMock];
+    vi.spyOn(React, 'useState').mockImplementation(useStateMock);
+
+    const { getByText } = render(<Home />)
+    button = getByText("Hello")
+    fireEvent.click(button)
+
+    expect(setStateMock).toHaveBeenCalledWith("SomeThingElse");
+  })
+});
+
 */
