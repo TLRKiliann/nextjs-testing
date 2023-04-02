@@ -1,10 +1,18 @@
-import React, { useState } from 'react'
+//import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
+import { getData } from './api/user'
 
-const Home:React.FC = () => {
+type DataProps = {
+  users: {
+    id: number,
+    name: string
+  }[];
+}
 
-  //const [truc, setTruc] = useState<string>("Hello");
+const Home = ({users}: DataProps) => {
+
+  //const [truc, setTruc] = someState<string | undefined>("");
 
   const count: number = 10;
   const name: string = "Gertrude";
@@ -21,13 +29,12 @@ const Home:React.FC = () => {
     return name;
   } 
   deepEqual(name);
-  /*
-  const handleTruc = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  /*const handleTruc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTruc(e.target.value);
     console.log(truc, "ok input works");
     e.preventDefault();
-  }
-  */
+  }*/
 
   return (
     <>
@@ -41,15 +48,35 @@ const Home:React.FC = () => {
         <div>
           {name}
         </div>
+        <div>
+        {users.map((user) => (
+          <p key={user.id}>
+            {user.name}
+          </p>
+        ))}
+
+        </div>
       </main>
     </>
   )
 }
 export default Home
 
+export async function getServerSideProps() {
+  const data = await getData()
+  return {
+    props: {
+      users: data
+    }
+  }
+}
+
 /*
         <div>
-          <input id="trucid" name="input" value={truc} onChange={(e) => handleTruc(e)}/>
+          <input id="trucid" name="input" value={truc} onChange={(e) => handleTruc(e)} />
           <p>{truc}</p>
+          <button type="button" onClick={() => setTruc("SomeThingElse")}>
+            Click
+          </button>
         </div>
 */
