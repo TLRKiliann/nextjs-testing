@@ -1,34 +1,17 @@
-import React, { useState } from 'react'
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
+import { getData } from './api/user'
+import Counter from './Counter'
 
-const Home:React.FC = () => {
+type UserProps = {
+  users: {
+    id: number,
+    name: string
+  }[];
+}
 
-  //const [truc, setTruc] = useState<string>("Hello");
-
-  const count: number = 10;
-  const name: string = "Gertrude";
-
-  console.log(name, " ---> name");
-  console.log(typeof(name), " ---> typeof name");
-
-  const lightEqualNum = (count: number) => {
-    return count;
-  }
-  lightEqualNum(count);
-
-  const deepEqual = (name: string) => {
-    return name;
-  } 
-  deepEqual(name);
-  /*
-  const handleTruc = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTruc(e.target.value);
-    console.log(truc, "ok input works");
-    e.preventDefault();
-  }
-  */
-
+const Home = ({users}: UserProps) => {
+  
   return (
     <>
       <Head>
@@ -37,19 +20,30 @@ const Home:React.FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
       <main className={styles.main}>
+
         <div>
-          {name}
+        {users.map((user) => (
+          <p key={user.id}>
+            {user.name}
+          </p>
+        ))}
         </div>
+
+        <Counter />
+      
       </main>
     </>
   )
 }
 export default Home
 
-/*
-        <div>
-          <input id="trucid" name="input" value={truc} onChange={(e) => handleTruc(e)}/>
-          <p>{truc}</p>
-        </div>
-*/
+export async function getServerSideProps() {
+  const data = await getData()
+  return {
+    props: {
+      users: data
+    }
+  }
+}
