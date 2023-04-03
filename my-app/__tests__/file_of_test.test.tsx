@@ -23,6 +23,10 @@ test('testing Home function component', () => {
   expect(Home).toBeDefined();
 });
 
+test('testing state function component', () => {
+  expect(screen.getByTestId('number')).toBeInTheDocument();
+});
+
 test('my func lightEqualNum is defined', () => {
   expect(lightEqualNum).toBeDefined()
 });

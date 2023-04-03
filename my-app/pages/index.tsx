@@ -1,19 +1,20 @@
-//import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { getData } from './api/user'
 
-type DataProps = {
+type UserProps = {
   users: {
     id: number,
     name: string
-  }[];
+  };
 }
 
-const Home = ({users}: DataProps) => {
+const Home = ({users}: UserProps[]) => {
 
-  //const [truc, setTruc] = someState<string | undefined>("");
-
+  const [number, setNumber] = useState(0);
+  const [numbers, setNumbers] = useState<number[]>([]);
+  
   const count: number = 10;
   const name: string = "Gertrude";
 
@@ -30,11 +31,19 @@ const Home = ({users}: DataProps) => {
   } 
   deepEqual(name);
 
-  /*const handleTruc = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTruc(e.target.value);
-    console.log(truc, "ok input works");
-    e.preventDefault();
-  }*/
+
+  const increment = () => {
+    setNumber(previous => previous + 1);
+  }
+
+  const decrement = () => {
+    setNumber(previous => previous - 1);
+  }
+
+  const enter = () => {
+    setNumbers((prev) => [...prev, number]);
+    setNumber(0);
+  }
 
   return (
     <>
@@ -44,17 +53,34 @@ const Home = ({users}: DataProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
       <main className={styles.main}>
         <div>
           {name}
         </div>
+
         <div>
         {users.map((user) => (
           <p key={user.id}>
             {user.name}
           </p>
         ))}
+        </div>
 
+        <div>
+          <p data-testid="number">{number}</p>
+          <p>{numbers.join(',')}</p>
+
+          <button type="button" onClick={increment}>
+            Click +
+          </button>
+          <button type="button" onClick={decrement}>
+            Click -
+          </button>
+
+          <button type="button" onClick={enter}>
+            Enter
+          </button>
         </div>
       </main>
     </>
@@ -70,13 +96,3 @@ export async function getServerSideProps() {
     }
   }
 }
-
-/*
-        <div>
-          <input id="trucid" name="input" value={truc} onChange={(e) => handleTruc(e)} />
-          <p>{truc}</p>
-          <button type="button" onClick={() => setTruc("SomeThingElse")}>
-            Click
-          </button>
-        </div>
-*/
