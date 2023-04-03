@@ -1,50 +1,17 @@
-import { useState } from 'react'
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { getData } from './api/user'
+import Counter from './Counter'
 
 type UserProps = {
   users: {
     id: number,
     name: string
-  };
+  }[];
 }
 
-const Home = ({users}: UserProps[]) => {
-
-  const [number, setNumber] = useState(0);
-  const [numbers, setNumbers] = useState<number[]>([]);
+const Home = ({users}: UserProps) => {
   
-  const count: number = 10;
-  const name: string = "Gertrude";
-
-  console.log(name, " ---> name");
-  console.log(typeof(name), " ---> typeof name");
-
-  const lightEqualNum = (count: number) => {
-    return count;
-  }
-  lightEqualNum(count);
-
-  const deepEqual = (name: string) => {
-    return name;
-  } 
-  deepEqual(name);
-
-
-  const increment = () => {
-    setNumber(previous => previous + 1);
-  }
-
-  const decrement = () => {
-    setNumber(previous => previous - 1);
-  }
-
-  const enter = () => {
-    setNumbers((prev) => [...prev, number]);
-    setNumber(0);
-  }
-
   return (
     <>
       <Head>
@@ -55,9 +22,6 @@ const Home = ({users}: UserProps[]) => {
       </Head>
       
       <main className={styles.main}>
-        <div>
-          {name}
-        </div>
 
         <div>
         {users.map((user) => (
@@ -67,21 +31,8 @@ const Home = ({users}: UserProps[]) => {
         ))}
         </div>
 
-        <div>
-          <p data-testid="number">{number}</p>
-          <p>{numbers.join(',')}</p>
-
-          <button type="button" onClick={increment}>
-            Click +
-          </button>
-          <button type="button" onClick={decrement}>
-            Click -
-          </button>
-
-          <button type="button" onClick={enter}>
-            Enter
-          </button>
-        </div>
+        <Counter />
+      
       </main>
     </>
   )
